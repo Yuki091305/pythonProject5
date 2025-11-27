@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
-# Create your views here.
+from django.http import Http404
 from .models import Book, Author, BookInstance, Genre
 
 def index(request):
@@ -25,6 +25,7 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
+    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         # В первую очередь получаем базовую реализацию контекста
@@ -32,3 +33,51 @@ class BookListView(generic.ListView):
         # Добавляем новую переменную к контексту и инициализируем её некоторым значением
         context['some_data'] = 'This is just some data'
         return context
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+    def book_detail_view(request, pk):
+        try:
+            book_id = Book.objects.get(pk=pk)
+        except Book.DoesNotExist:
+            raise Http404("Book does not exist")
+
+        # book_id=get_object_or_404(Book, pk=pk)
+
+        return render(
+            request,
+            'catalog/book_detail.html',
+            context={'book': book_id, }
+        )
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        # В первую очередь получаем базовую реализацию контекста
+        context = super(AuthorListView, self).get_context_data(**kwargs)
+        # Добавляем новую переменную к контексту и инициализируем её некоторым значением
+        context['some_data'] = 'This is just some data'
+        return context
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
+
+    def author_detail_view(request, pk):
+        try:
+            book_id = Author.objects.get(pk=pk)
+        except Author.DoesNotExist:
+            raise Http404("Author does not exist")
+
+        # book_id=get_object_or_404(Book, pk=pk)
+
+        return render(
+            request,
+            'catalog/book_detail.html',
+            context={'book': book_id, }
+        )
+
+
+
