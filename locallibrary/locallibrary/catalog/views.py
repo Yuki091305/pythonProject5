@@ -75,7 +75,7 @@ class AuthorDetailView(generic.DetailView):
 
         return render(
             request,
-            'catalog/book_detail.html',
+            'catalog/author_detail.html',
             context={'book': book_id, }
         )
 

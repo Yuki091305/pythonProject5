@@ -7,10 +7,10 @@
   <strong>Author:</strong>
   <a href="{% url 'author-detail' book.author.pk %}">{{ book.author }}</a>
 </p>
-  <p><strong>Summary:</strong> {{ book.summary }}</p>
-  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
-  <p><strong>Language:</strong> {{ book.language }}</p>
-  <p><strong>Genre:</strong> {% for genre in book.genre.all %} {{ genre }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  <p><strong>last_name:</strong> {{ author.last_name }}</p>
+  <p><strong>first_name:</strong> {{ author.first_name }}</p>
+  <p><strong>date_of_birth:</strong> {{ author.date_of_birth }}</p>
+  <p><strong>date_of_death:</strong> {% for genre in book.genre.all %} {{ genre }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
 
   <div style="margin-left:20px;margin-top:20px">
     <h4>Copies</h4>
