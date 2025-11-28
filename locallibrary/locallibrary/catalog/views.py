@@ -14,6 +14,17 @@ def index(request):
     num_instances_available=BookInstance.objects.filter(status__exact='a').count()
     num_authors=Author.objects.count()  # Метод 'all()' применён по умолчанию.
 
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
+
+    # Render the HTML template index.html with the data in the context variable.
+    return render(
+        request,
+        'index.html',
+        context={'num_books': num_books, 'num_instances': num_instances,
+                 'num_instances_available': num_instances_available, 'num_authors': num_authors,
+                 'num_visits': num_visits},  # num_visits appended
+    )
     # Отрисовка HTML-шаблона index.html с данными внутри
     # переменной контекста context
     return render(
@@ -65,19 +76,6 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
-    def author_detail_view(request, pk):
-        try:
-            book_id = Author.objects.get(pk=pk)
-        except Author.DoesNotExist:
-            raise Http404("Author does not exist")
-
-        # book_id=get_object_or_404(Book, pk=pk)
-
-        return render(
-            request,
-            'catalog/author_detail.html',
-            context={'book': book_id, }
-        )
 
 
 
