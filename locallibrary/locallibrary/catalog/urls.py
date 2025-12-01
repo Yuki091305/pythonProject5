@@ -8,3 +8,4 @@ urlpatterns = [
     path(r'^book/(?P<pk>\d+)$', views.BookDetailView.as_view(), name='book-detail'),
     path(r'^authors/(?P<pk>\d+)$', views.AuthorDetailView.as_view(), name='author-detail'),
 ]
+

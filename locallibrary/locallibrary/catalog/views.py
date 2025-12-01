@@ -1,3 +1,5 @@
+from lib2to3.fixes.fix_input import context
+
 from django.shortcuts import render
 from django.views import generic
 from django.http import Http404
@@ -12,26 +14,28 @@ def index(request):
     num_instances=BookInstance.objects.all().count()
     # Доступные книги (статус = 'a')
     num_instances_available=BookInstance.objects.filter(status__exact='a').count()
-    num_authors=Author.objects.count()  # Метод 'all()' применён по умолчанию.
+    ger_books = Book.objects.filter(title__icontains ='and').count()
+    genre_books = Book.objects.filter(genre__name__iexact = 'of').count()
+    num_authors=Author.objects.count(),
+    context = {
+        'num_books': num_books,
+        'num_instances': num_instances,
+        'num_instances_available': num_instances_available,
+        'num_authors': num_authors,
+        'ger_books': ger_books,
+        'genre_books': genre_books,
+    }
 
     num_visits = request.session.get('num_visits', 0)
     request.session['num_visits'] = num_visits + 1
 
-    # Render the HTML template index.html with the data in the context variable.
+
     return render(
         request,
         'index.html',
         context={'num_books': num_books, 'num_instances': num_instances,
                  'num_instances_available': num_instances_available, 'num_authors': num_authors,
                  'num_visits': num_visits},  # num_visits appended
-    )
-    # Отрисовка HTML-шаблона index.html с данными внутри
-    # переменной контекста context
-    return render(
-        request,
-        'index.html',
-        context={'num_books': num_books, 'num_instances': num_instances,
-                 'num_instances_available': num_instances_available, 'num_authors': num_authors},
     )
 
 class BookListView(generic.ListView):
